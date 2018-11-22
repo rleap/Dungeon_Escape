@@ -21,6 +21,8 @@ public class Spider : Enemy, IDamageable
 
     public void Damage()
     {
+        if (isDead) { return; }
+
         Debug.Log("Spider::Damage()");
 
         Health--;
@@ -29,6 +31,8 @@ public class Spider : Enemy, IDamageable
         {
             isDead = true;
             anim.SetTrigger("Death");
+            GameObject diamond = Instantiate(diamondPrefab, transform.position, Quaternion.identity) as GameObject;
+            diamond.GetComponent<Diamond>().gems = base.gems;
         }
     }
 

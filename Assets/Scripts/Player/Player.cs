@@ -10,7 +10,11 @@ public class Player : MonoBehaviour, IDamageable
     SpriteRenderer swordArcSprite;
 
     bool isGrounded = false;
-    [SerializeField] int playerHealth;
+    [Header("Collections")]
+    [SerializeField] public int diamonds;
+
+    [Header("Settings")]
+    [SerializeField] public int playerHealth;
     [SerializeField] float speed = 3.0f;
     [SerializeField] float jumpforce = 5.0f;
     [SerializeField] LayerMask groundLayer;

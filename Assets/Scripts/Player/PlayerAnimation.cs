@@ -34,7 +34,6 @@ public class PlayerAnimation : MonoBehaviour
 
     public void Death()
     {
-        Debug.Log("Player Trigger Death Animation");
         anim.SetTrigger("Death");
     }
 
