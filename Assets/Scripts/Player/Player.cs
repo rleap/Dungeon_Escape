@@ -1,6 +1,8 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityStandardAssets.CrossPlatformInput;
+using UnityEngine.SceneManagement;
 
 public class Player : MonoBehaviour, IDamageable
 {
@@ -42,7 +44,7 @@ public class Player : MonoBehaviour, IDamageable
 
     void Move()
     {
-        float move = Input.GetAxisRaw("Horizontal");
+        float move = CrossPlatformInputManager.GetAxis("Horizontal");
 
         isGrounded = IsGrounded();
 
@@ -56,7 +58,8 @@ public class Player : MonoBehaviour, IDamageable
             Flip(false);
         }
 
-        if (Input.GetKeyDown(KeyCode.Space) && isGrounded)
+        // Jump
+        if (CrossPlatformInputManager.GetButtonDown("B_Button") && isGrounded)
         {
             rigid.velocity = new Vector2(rigid.velocity.x, jumpforce);
             playerAnimation.Jump(true); // Trigger jump animation
@@ -74,7 +77,7 @@ public class Player : MonoBehaviour, IDamageable
     {
         isGrounded = IsGrounded();
 
-        if (Input.GetMouseButtonDown(0) && isGrounded)
+        if (CrossPlatformInputManager.GetButtonDown("A_Button") && isGrounded)
         {
             playerAnimation.Attack();
         }
@@ -112,19 +115,41 @@ public class Player : MonoBehaviour, IDamageable
 
     public void Damage()
     {
-        Debug.Log("Player::Damage()");
+        //Debug.Log("Player::Damage()");
 
-        Debug.Log("Player Health: " + Health);
-
-        playerAnimation.Hit();
-
-        Health--;
+        //Debug.Log("Player Health: " + Health);
 
         if (Health < 1)
         {
-            Debug.Log("Player Dead");
+            return;
+        }
+
+        //playerAnimation.Hit();
+
+        Health--;
+
+        UIManager.Instance.UpdateLives(Health);
+
+        if (Health < 1)
+        {
+            //Debug.Log("Player Dead");
             playerAnimation.Death();
+
+            StartCoroutine(AfterDeath());
         }
     }
 
+    private IEnumerator AfterDeath()
+    {
+        yield return new WaitForSeconds(3.0f);
+
+        // Return to main menu
+        SceneManager.LoadScene("Main_Menu");
+    }
+
+    public void AddGems(int amount)
+    {
+        diamonds += amount;
+        UIManager.Instance.UpdateGemCount(diamonds);
+    }
 }
