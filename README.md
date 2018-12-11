@@ -1,4 +1,4 @@
-# Dungeon_Escape
+# Dungeon Escape
 
 # Description
 Dungeon Escape platform, built as part of Udemy class project.
